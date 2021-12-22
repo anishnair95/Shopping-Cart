@@ -32,14 +32,14 @@ const getData = async () => {
     let arr = []
     let panels = "";
 
-    var existItem=JSON.parse(localStorage.getItem('cartItems'));
+    var existItem = JSON.parse(localStorage.getItem('cartItems'));
     data.forEach(element => {
-      
-      if(existItem && existItem[element.id]!=undefined){
-           arr.push(existItem[element.id])
+
+      if (existItem && existItem[element.id] != undefined) {
+        arr.push(existItem[element.id])
       }
       else
-      arr.push(element);
+        arr.push(element);
 
       if (arr.length == 3) {
 
@@ -131,12 +131,12 @@ const getData = async () => {
   }
 
 
-  localCart=localStorage.getItem('cartNumbers');
-  if(localCart){
-    var count=document.getElementById('count');
-    count.textContent=localCart;
+  localCart = localStorage.getItem('cartNumbers');
+  if (localCart) {
+    var count = document.getElementById('count');
+    count.textContent = localCart;
   }
- 
+
 }
 
 
@@ -153,28 +153,29 @@ document.addEventListener('click', function (e) {
   //for increment
   if (e.target.classList.contains('inc')) {
 
-    
-  
+
+
     let inp = e.target.previousElementSibling.firstElementChild;
     if (inp.value <= 9) {
       inp.value++;
 
-      if(inp.value==1){
+      if (inp.value == 1) {
         e.target.parentElement.nextElementSibling.classList.add('btn-enabled');
-        e.target.parentElement.nextElementSibling.disabled=false;
+        e.target.parentElement.nextElementSibling.disabled = false;
       }
 
       //inner condition
-    if(e.target.parentElement.nextElementSibling.textContent==='Go To Cart'){
-       var id=e.target.parentElement.parentElement.parentElement.id;
-       console.log('Update the cart');
-       updateCart('inc',id);
-       cartNumbers('inc',1);
-     }
+      if (e.target.parentElement.nextElementSibling.textContent === 'Go To Cart') {
+        var id = e.target.parentElement.parentElement.parentElement.id;
+        var price = e.target.parentElement.previousElementSibling.firstElementChild.textContent;
+        price = Number(price.slice(1));
+        console.log('Update the cart');
+        updateCart('inc', id);
+        cartNumbers('inc', 1);
+        totalCost('inc', price);
+      }
 
-      
     }
-
   }
   //for decrement
   if (e.target.classList.contains('dec')) {
@@ -183,31 +184,34 @@ document.addEventListener('click', function (e) {
     if (inp.value > 0) {
       inp.value--;
 
-      if(inp.value==0){
+      if (inp.value == 0) {
         e.target.parentElement.nextElementSibling.classList.remove('btn-enabled');
-        e.target.parentElement.nextElementSibling.disabled=true;
-        e.target.parentElement.nextElementSibling.textContent='Add To Cart';
-        var item=JSON.parse(localStorage.getItem('cartItems'));
-        var temp=e.target.parentElement.parentElement.parentElement.id;
+        e.target.parentElement.nextElementSibling.disabled = true;
+        e.target.parentElement.nextElementSibling.textContent = 'Add To Cart';
+        var item = JSON.parse(localStorage.getItem('cartItems'));
+        var temp = e.target.parentElement.parentElement.parentElement.id;
         delete item[temp];
-        cartNumbers('dec',1);
-        localStorage.setItem('cartItems',JSON.stringify(item));
+        cartNumbers('dec', 1);
+        localStorage.setItem('cartItems', JSON.stringify(item));
       }
 
       //inner condition
-      if(e.target.parentElement.nextElementSibling.textContent==='Go To Cart'){
-        var id=e.target.parentElement.parentElement.parentElement.id;
+      if (e.target.parentElement.nextElementSibling.textContent === 'Go To Cart') {
+        var id = e.target.parentElement.parentElement.parentElement.id;
+        var price = e.target.parentElement.previousElementSibling.firstElementChild.textContent;
+        price = Number(price.slice(1));
         console.log('Update the cart');
-        updateCart('dec',id);
-        cartNumbers('dec',1);
+        updateCart('dec', id);
+        cartNumbers('dec', 1);
+        totalCost('dec', price);
       }
-   
+
     }
   }
 
   //addToCart
 
-  if (e.target.classList.contains('btn-cart') && e.target.textContent=='Add To Cart') {
+  if (e.target.classList.contains('btn-cart') && e.target.textContent == 'Add To Cart') {
     // console.log(e.target);
     var id = e.target.parentElement.parentElement.id;
     var img = e.target.parentElement.parentElement.children[0].src;
@@ -215,10 +219,13 @@ document.addEventListener('click', function (e) {
     var about = e.target.parentElement.parentElement.children[1].children[1].textContent;
     var price = e.target.previousElementSibling.previousElementSibling.firstElementChild.textContent;
     var qty = e.target.previousElementSibling.children[1].firstElementChild.value;
-    var btnClassList=e.target.classList;
-    var btnDisabled=e.target.disabled;
+    var btnClassList = e.target.classList;
+    var btnDisabled = e.target.disabled;
 
-    var btnClasses=""+btnClassList[0]+" "+btnClassList[1];
+    var btnClasses = "" + btnClassList[0] + " " + btnClassList[1];
+    price = Number(price.slice(1));
+    qty = parseInt(qty);
+
     console.log(id);
     console.log(img);
     console.log(name);
@@ -228,7 +235,7 @@ document.addEventListener('click', function (e) {
     console.log(btnClasses);
     console.log(btnDisabled);
 
-    
+
     var obj = {
       id: id,
       img: img,
@@ -236,51 +243,54 @@ document.addEventListener('click', function (e) {
       about: about,
       price: price,
       qty: qty,
-      btnClasses:btnClasses,
-      btnDisabled:btnDisabled,
-      inCart:'Go To Cart'
+      btnClasses: btnClasses,
+      btnDisabled: btnDisabled,
+      inCart: 'Go To Cart'
     }
-  
-    e.target.textContent='Go To Cart';
+
+    e.target.textContent = 'Go To Cart';
 
     addToCart(obj);
   }
-  
+
 });
 
 
-//add item to cart
+//add item to cart- this will execute if item added for first time....
 const addToCart = (obj) => {
 
   var cartItems = JSON.parse(localStorage.getItem('cartItems'));
 
+  //keeping remaining items and adding new object with it
   if (cartItems) {
-    cartItems = { ...cartItems, [obj.id]:obj}
+    cartItems = { ...cartItems, [obj.id]: obj }
   }
   else {
-    cartItems={[obj.id]:obj}
+    cartItems = { [obj.id]: obj }
   }
 
   localStorage.setItem('cartItems', JSON.stringify(cartItems));
 
-  cartNumbers('inc',obj.qty);
+  //adding quantity for first time so sending inc and quantity
+  cartNumbers('inc', obj.qty);
+  totalCost('inc', obj.qty * obj.price);
 
 }
 
 
 //update items of cart with each increment
-const updateCart=(cond,id)=>{
+const updateCart = (cond, id) => {
   var cartItems = JSON.parse(localStorage.getItem('cartItems'));
 
-  var item=cartItems[id];
-  
-if(cond==='inc')
-  item.qty++;
+  var item = cartItems[id];
+
+  if (cond === 'inc')
+    item.qty++;
   else
-  item.qty--;
+    item.qty--;
   console.log(item);
 
-  cartItems = { ...cartItems, [id]:item};
+  cartItems = { ...cartItems, [id]: item };
 
   localStorage.setItem('cartItems', JSON.stringify(cartItems));
 
@@ -289,7 +299,7 @@ if(cond==='inc')
 
 
 //count items in cart
-const cartNumbers = (cond,qty) => {
+const cartNumbers = (cond, qty) => {
   let productNumbers = localStorage.getItem('cartNumbers');
   productNumbers = parseInt(productNumbers);
 
@@ -306,10 +316,35 @@ const cartNumbers = (cond,qty) => {
     localStorage.setItem('cartNumbers', qty);
   }
 
-  var count=document.getElementById('count');
-  count.textContent=localStorage.getItem('cartNumbers');
-  
+  var count = document.getElementById('count');
+  count.textContent = localStorage.getItem('cartNumbers');
 
+
+
+}
+
+const totalCost = (cond, price) => {
+
+  var totalCost = localStorage.getItem('totalCost');
+
+  if (totalCost) {
+    //convert to int
+    totalCost=Number(totalCost);
+
+    if (cond === 'dec') {
+      totalCost -= price;
+      localStorage.setItem('totalCost', totalCost);
+    }
+    else {
+      totalCost += price;
+      localStorage.setItem('totalCost', totalCost);
+    }
+
+  }
+  else {
+    console.log(price);
+    localStorage.setItem('totalCost', price);
+  }
 
 }
 window.onload = getData();
