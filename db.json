@@ -1,0 +1,101 @@
+[
+   {
+       "id":1,
+       "img":"images/noodles.jpg",
+       "name":"Chicken Noodles",
+       "about":"Tasty Delicious",
+       "price":"5",
+       "qty":0,
+       "btnClasses":"btn-cart",
+       "btnDisabled":true,
+       "inCart":"Add To Cart"
+   },
+   {
+       "id":2,
+       "img":"images/samosa.jpg",
+       "name":"Samosa",
+       "about":"Veg stuffed",
+       "price":"8",
+       "qty":0,
+       "btnClasses":"btn-cart",
+       "btnDisabled":true,
+       "inCart":"Add To Cart"
+   },
+   {
+       "id":3,
+       "img":"images/burgerfrench-combo.jpg",
+       "name":"Burger and French Fries",
+       "about":"Combo Pack",
+       "price":"10",
+       "qty":0,
+       "btnClasses":"btn-cart",
+       "btnDisabled":true,
+       "inCart":"Add To Cart"
+   },
+   {
+       "id":4,
+       "img":"images/masaladosa.jpg",
+       "name":"Masala Dosa",
+       "about":"Breakfast Special",
+       "price":"7.2",
+       "qty":0,
+       "btnClasses":"btn-cart",
+       "btnDisabled":true,
+       "inCart":"Add To Cart"
+   },
+   {
+       "id":5,
+       "img":"images/Rice+Mushroom.jpg",
+       "name":"Plain Rice and Mushroom",
+       "about":"Lunch Combo",
+       "price":"10",
+       "qty":0,
+       "btnClasses":"btn-cart",
+       "btnDisabled":true,
+       "inCart":"Add To Cart"
+   },
+   {
+       "id":6,
+       "img":"images/Sandwich.jpg",
+       "name":"Sandwich",
+       "about":"Cheese Special",
+       "price":"8.5",
+       "qty":0,
+       "btnClasses":"btn-cart",
+       "btnDisabled":true,
+       "inCart":"Add To Cart"
+   },
+   {
+       "id":7,
+       "img":"images/thali.jpg",
+       "name":"Thali",
+       "about":"Plain Rice with Roti Dal",
+       "price":"15",
+       "qty":0,
+       "btnClasses":"btn-cart",
+       "btnDisabled":true,
+       "inCart":"Add To Cart"
+   },
+   {
+       "id":8,
+       "img":"images/whitesaucepasta.jpg",
+       "name":"White Sauce Pasta",
+       "about":"Pasta Special",
+       "price":"9.8",
+       "qty":0,
+       "btnClasses":"btn-cart",
+       "btnDisabled":true,
+       "inCart":"Add To Cart"
+   },
+   {
+       "id":9,
+       "img":"images/chocolatecake.jpg",
+       "name":"Chocolate Cake",
+       "about":"Cake Special",
+       "price":"10.8",
+       "qty":0,
+       "btnClasses":"btn-cart",
+       "btnDisabled":true,
+       "inCart":"Add To Cart"
+   }
+]
