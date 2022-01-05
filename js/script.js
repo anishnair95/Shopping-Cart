@@ -23,7 +23,7 @@ const createCard = () => {
 
 //render the element dynamically
 const getData = async () => {
-  const response = await fetch('../db.json');
+  const response = await fetch('./db.json');
   const data = await response.json();
   console.log(data);
 
@@ -159,6 +159,7 @@ document.addEventListener('click', function (e) {
     if (inp.value <= 9) {
       inp.value++;
 
+       //button enabled
       if (inp.value == 1) {
         e.target.parentElement.nextElementSibling.classList.add('btn-enabled');
         e.target.parentElement.nextElementSibling.disabled = false;
@@ -172,7 +173,7 @@ document.addEventListener('click', function (e) {
         console.log('Update the cart');
         updateCart('inc', id);
         cartNumbers('inc', 1);
-        totalCost('inc', price);
+        calCost('inc', price);
       }
 
     }
@@ -187,12 +188,24 @@ document.addEventListener('click', function (e) {
       if (inp.value == 0) {
         e.target.parentElement.nextElementSibling.classList.remove('btn-enabled');
         e.target.parentElement.nextElementSibling.disabled = true;
-        e.target.parentElement.nextElementSibling.textContent = 'Add To Cart';
-        var item = JSON.parse(localStorage.getItem('cartItems'));
-        var temp = e.target.parentElement.parentElement.parentElement.id;
-        delete item[temp];
-        cartNumbers('dec', 1);
-        localStorage.setItem('cartItems', JSON.stringify(item));
+
+        if(e.target.parentElement.nextElementSibling.textContent=='Go To Cart'){
+          e.target.parentElement.nextElementSibling.textContent = 'Add To Cart';
+          var item = JSON.parse(localStorage.getItem('cartItems'));
+          var temp = e.target.parentElement.parentElement.parentElement.id;
+          var price=item[temp].price;
+
+          //deleting item from cartItems
+          delete item[temp];
+          localStorage.setItem('cartItems', JSON.stringify(item));
+
+          //decreasing cart qty
+          cartNumbers('dec', 1);
+          //decreasing cart price
+          calCost('dec',price);
+
+        }      
+        
       }
 
       //inner condition
@@ -203,13 +216,13 @@ document.addEventListener('click', function (e) {
         console.log('Update the cart');
         updateCart('dec', id);
         cartNumbers('dec', 1);
-        totalCost('dec', price);
+        calCost('dec', price);
       }
 
     }
   }
 
-  //addToCart
+  //addToCart - button clicked
 
   if (e.target.classList.contains('btn-cart') && e.target.textContent == 'Add To Cart') {
     // console.log(e.target);
@@ -273,7 +286,7 @@ const addToCart = (obj) => {
 
   //adding quantity for first time so sending inc and quantity
   cartNumbers('inc', obj.qty);
-  totalCost('inc', obj.qty * obj.price);
+  calCost('inc', obj.qty * obj.price);
 
 }
 
@@ -291,25 +304,22 @@ const updateCart = (cond, id) => {
   console.log(item);
 
   cartItems = { ...cartItems, [id]: item };
-
   localStorage.setItem('cartItems', JSON.stringify(cartItems));
 
 }
 
-
-
 //count items in cart
 const cartNumbers = (cond, qty) => {
   let productNumbers = localStorage.getItem('cartNumbers');
-  productNumbers = parseInt(productNumbers);
+  productNumbers = Number(productNumbers);
 
 
   if (productNumbers) {
 
     if (cond === 'inc')
-      localStorage.setItem('cartNumbers', productNumbers + parseInt(qty));
+      localStorage.setItem('cartNumbers', productNumbers + Number(qty));
     else
-      localStorage.setItem('cartNumbers', productNumbers - parseInt(qty));
+      localStorage.setItem('cartNumbers', productNumbers - Number(qty));
 
   }
   else {
@@ -319,11 +329,10 @@ const cartNumbers = (cond, qty) => {
   var count = document.getElementById('count');
   count.textContent = localStorage.getItem('cartNumbers');
 
-
-
 }
 
-const totalCost = (cond, price) => {
+//calculates total cost of items
+const calCost = (cond, price) => {
 
   var totalCost = localStorage.getItem('totalCost');
 
