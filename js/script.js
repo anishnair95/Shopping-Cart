@@ -54,7 +54,7 @@ const getData = async () => {
           <div class="add-item">
 
             <div class="price">
-              <p>$${arr[0].price}</p>
+              <p>₹${arr[0].price}</p>
             </div>
             <div class="add">
               <button class='btn-counter dec'>-</button>
@@ -78,7 +78,7 @@ const getData = async () => {
           <div class="add-item">
 
             <div class="price">
-              <p>$${arr[1].price}</p>
+              <p>₹${arr[1].price}</p>
             </div>
             <div class="add">
               <button class='btn-counter dec'>-</button>
@@ -102,7 +102,7 @@ const getData = async () => {
           <div class="add-item">
 
             <div class="price">
-              <p>$${arr[2].price}</p>
+              <p>₹${arr[2].price}</p>
             </div>
             <div class="add">
               <button class='btn-counter dec'>-</button>
@@ -131,7 +131,7 @@ const getData = async () => {
   }
 
 
-  localCart = localStorage.getItem('cartNumbers');
+  var localCart = localStorage.getItem('cartNumbers');
   if (localCart) {
     var count = document.getElementById('count');
     count.textContent = localCart;
@@ -356,4 +356,12 @@ const calCost = (cond, price) => {
   }
 
 }
-window.onload = getData();
+
+if(root){
+  getData();
+}
+
+
+export{updateCart,cartNumbers,calCost}
+
+
